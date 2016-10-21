@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.subbasin {
+  fill: #eee;
+}
+
+.subbasin:hover {
+  fill: brown;
+}
+
+.subbasin-border {
+  fill: none;
+  stroke: #777;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.stream {
+  fill: none;
+  stroke: blue;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.basin-label {
+  color: red;
+  font-size: 14px;  
+}
+
+</style>
+<svg width="800" height="800"></svg>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+<script src="./d3/colorbrewer.js"></script>
+
+
+<script>
+
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+queue()
+    .defer(d3.json, "./mahantango_subbasins9_wgs84.json")
+    .defer(d3.json, "./mahantango_streams_wgs84.json")
+    .await(ready);
+
+function ready(error, conewago_basins, conewago_streams) {
+  if (error) throw error;
+
+  //mahantango_subbasins9_wgs84.json
+  //springcreek_subbasins8_wgs84.json
+  //mahantango_subbasins_wgs84.json
+  //conewago_subbasins_wgs84.json
+  //conewago_streams_wgs84.json
+
+  var basinFeatureContainer = conewago_basins.objects["mahantango_subbasins9_wgs84"];
+  var streamFeatureContainer = conewago_streams.objects["mahantango_streams_wgs84"];
+
+  var land = topojson.feature(conewago_basins, {
+    type: "GeometryCollection",
+    geometries: basinFeatureContainer.geometries.filter(function(d) {
+      return true;
+      //return (d.id / 10000 | 0) % 100 !== 99;
+    })
+  });
+
+  var streams = topojson.feature(conewago_streams, {
+    type: "GeometryCollection",
+    geometries: streamFeatureContainer.geometries.filter(function(d) {
+      return true;
+      //return (d.id / 10000 | 0) % 100 !== 99;
+    })
+  });
+
+  // EPSG:32111
+  var path = d3.geoPath()
+      .projection(d3.geoTransverseMercator()
+          .rotate([78, -33.8])
+          .fitExtent([[20, 20], [780, 780]], land));
+
+
+  var subbasin_polygons = svg.selectAll("path")
+    .data(land.features)
+    .enter()
+    .append("path")
+    .attr("class", "subbasin")
+    .attr("d", path);
+    
+
+  var subbasin_borders = svg.append("path")
+      .datum(topojson.mesh(conewago_basins, basinFeatureContainer, function(a, b) { 
+        //return a !== b;
+        return true; 
+      }))
+      .attr("class", "subbasin-border")
+      .attr("d", path);
+
+  var subbasin_streams = svg.append("g")
+      .selectAll(".stream")
+      .data(streams.features)
+      .enter()
+      .append("path")
+      .attr("class", "stream")
+      .attr("d", path);
+
+      console.log("test");
+
+  var subbasin_labels = svg.append("g")
+    .selectAll(".basin-label")
+    .data(land.features)
+    .append("text")
+    .attr("class","basin-label")
+    .attr("transform", function(d){
+      return "translate(" + path.centroid(d) +")";
+    })
+    .text(function(d) { 
+      return d.properties["Subbasin"]; 
+    });
+
+
+}
+
+</script>

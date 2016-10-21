@@ -1,0 +1,31 @@
+measurement,value,watershed
+tn_kg_base,499644.82,Spring Creek
+tp_kg_base,77995.36,Spring Creek
+tsed_t_base,17587.60,Spring Creek
+tn_kg_wip,394472.30,Spring Creek
+tp_kg_wip,57361.23,Spring Creek
+tsed_t_wip,11365.13,Spring Creek
+tn_kg_bay,449680.3391,Spring Creek
+tp_kg_bay,70195.82255,Spring Creek
+tsed_t_bay,15828.84025,Spring Creek
+area_sqkm,378,Spring Creek
+tn_kg_base,555160.9124,mohantango
+tp_kg_base,86661.50932,mohantango
+tsed_t_base,19541.77809,mohantango
+tn_kg_wip,438302.5507,mohantango
+tp_kg_wip,63734.69449,mohantango
+tsed_t_wip,12627.91684,mohantango
+tn_kg_bay,499644.8212,mohantango
+tp_kg_bay,77995.35839,mohantango
+tsed_t_bay,17587.60028,mohantango
+area_sqkm,420,mohantango
+tn_kg_base,179766.3907,conewago
+tp_kg_base,28061.82206,conewago
+tsed_t_base,6327.813858,conewago
+tn_kg_wip,141926.5402,conewago
+tp_kg_wip,20637.90107,conewago
+tsed_t_wip,4089.039738,conewago
+tn_kg_bay,161789.7516,conewago
+tp_kg_bay,25255.63986,conewago
+tsed_t_bay,5695.032473,conewago
+area_sqkm,136,conewago
